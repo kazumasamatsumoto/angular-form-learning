@@ -33,7 +33,6 @@ interface PatternData {
     MatButtonModule,
     MatRadioModule,
     RadioModule,
-    JsonPipe,
   ],
   templateUrl: './pattern-selector-example.html',
   styleUrl: './pattern-selector-example.scss',
@@ -124,6 +123,7 @@ export class PatternSelectorExample implements OnInit {
   // パターンを選択
   selectPattern(index: number): void {
     this.selectedPatternIndex = index;
+    // imo-radioの値も同期させる必要がある場合はここで処理
   }
 
   // ラジオボタンの変更イベント

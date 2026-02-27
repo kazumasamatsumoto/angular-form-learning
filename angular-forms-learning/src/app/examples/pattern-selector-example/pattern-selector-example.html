@@ -5,139 +5,95 @@
   <mat-card-content>
     <p>3つのパターンが常に表示されており、それぞれ独立して4つのパラメータ（A, B, C, D）を横並びで調整できます。ラジオボタンで使用するパターンを選択してください。</p>
 
-    <!-- 全パターン共通のラジオグループ -->
-    <mat-radio-group [(ngModel)]="selectedPatternIndex">
-      <!-- 各パターンを行ごとに表示 -->
-      @for (pattern of patterns; track $index) {
-        <div class="pattern-row">
-          <!-- パターンカード -->
-          <div class="pattern-card">
-            <form [formGroup]="patternForms[$index]" class="pattern-form">
-            <!-- ラジオボタンとパラメータを横並びで表示 -->
-            <div class="pattern-content">
-              <!-- ラジオボタン -->
-              <div class="pattern-header">
-                <mat-radio-button [value]="$index">
-                  {{ pattern.name }}
-                </mat-radio-button>
-              </div>
+    <!-- ラジオボタングループ（全体で1つ、非表示） -->
+    <imo-radio [radios]="radioButtons" [defaultValue]="selectedPatternIndex.toString()"
+      (changed)="onRadioChange($event)" class="hidden-radio-group"></imo-radio>
 
-            <!-- パラメータを横並びで表示 -->
+    <!-- 各パターンを行ごとに表示 -->
+    @for (pattern of patterns; track $index) {
+    <div class="pattern-row">
+      <!-- パターンカード -->
+      <div class="pattern-card">
+        <div class="pattern-content">
+          <!-- ラジオボタン表示エリア（見た目用） -->
+          <div class="radio-display">
+            <div class="radio-item" (click)="selectPattern($index)">
+              <span class="radio-circle" [class.selected]="selectedPatternIndex === $index"></span>
+              <span class="radio-label">{{ pattern.name }}</span>
+            </div>
+          </div>
+
+          <!-- パラメータグリッド -->
+          <form [formGroup]="patternForms[$index]" class="pattern-form">
             <div class="parameters-grid">
-            <!-- パラメータ A -->
-            <div class="parameter-control">
-              <div class="parameter-header">
-                <h4>A</h4>
+              <!-- パラメータ A -->
+              <div class="parameter-control">
+                <div class="parameter-header">
+                  <h4>A</h4>
+                </div>
+                <div class="slider-input-row">
+                  <mat-slider min="0" max="100" step="1" discrete class="slider">
+                    <input matSliderThumb [value]="patternForms[$index].get('a')?.value || 0"
+                      (valueChange)="onSliderChange($index, 'a', $event)">
+                  </mat-slider>
+                  <input type="number" class="number-input" [value]="patternForms[$index].get('a')?.value"
+                    (input)="onInputChange($index, 'a', $event)" min="0" max="100">
+                </div>
+
               </div>
-              <div class="slider-input-row">
-                <mat-slider min="0" max="100" step="1" discrete class="slider">
-                  <input
-                    matSliderThumb
-                    [value]="patternForms[$index].get('a')?.value || 0"
-                    (valueChange)="onSliderChange($index, 'a', $event)"
-                  >
-                </mat-slider>
-                <input
-                  type="number"
-                  class="number-input"
-                  [value]="patternForms[$index].get('a')?.value"
-                  (input)="onInputChange($index, 'a', $event)"
-                  min="0"
-                  max="100"
-                >
+
+              <!-- パラメータ B -->
+              <div class="parameter-control">
+                <div class="parameter-header">
+                  <h4>B</h4>
+                </div>
+                <div class="slider-input-row">
+                  <mat-slider min="0" max="100" step="1" discrete class="slider">
+                    <input matSliderThumb [value]="patternForms[$index].get('b')?.value || 0"
+                      (valueChange)="onSliderChange($index, 'b', $event)">
+                  </mat-slider>
+                  <input type="number" class="number-input" [value]="patternForms[$index].get('b')?.value"
+                    (input)="onInputChange($index, 'b', $event)" min="0" max="100">
+                </div>
+
               </div>
-              <div class="progress-bar">
-                <div class="progress-fill progress-a" [style.width.%]="patternForms[$index].get('a')?.value"></div>
+
+              <!-- パラメータ C -->
+              <div class="parameter-control">
+                <div class="parameter-header">
+                  <h4>C</h4>
+                </div>
+                <div class="slider-input-row">
+                  <mat-slider min="0" max="100" step="1" discrete class="slider">
+                    <input matSliderThumb [value]="patternForms[$index].get('c')?.value || 0"
+                      (valueChange)="onSliderChange($index, 'c', $event)">
+                  </mat-slider>
+                  <input type="number" class="number-input" [value]="patternForms[$index].get('c')?.value"
+                    (input)="onInputChange($index, 'c', $event)" min="0" max="100">
+                </div>
+
+              </div>
+
+              <!-- パラメータ D -->
+              <div class="parameter-control">
+                <div class="parameter-header">
+                  <h4>D</h4>
+                </div>
+                <div class="slider-input-row">
+                  <mat-slider min="0" max="100" step="1" discrete class="slider">
+                    <input matSliderThumb [value]="patternForms[$index].get('d')?.value || 0"
+                      (valueChange)="onSliderChange($index, 'd', $event)">
+                  </mat-slider>
+                  <input type="number" class="number-input" [value]="patternForms[$index].get('d')?.value"
+                    (input)="onInputChange($index, 'd', $event)" min="0" max="100">
+                </div>
+
               </div>
             </div>
-
-            <!-- パラメータ B -->
-            <div class="parameter-control">
-              <div class="parameter-header">
-                <h4>B</h4>
-              </div>
-              <div class="slider-input-row">
-                <mat-slider min="0" max="100" step="1" discrete class="slider">
-                  <input
-                    matSliderThumb
-                    [value]="patternForms[$index].get('b')?.value || 0"
-                    (valueChange)="onSliderChange($index, 'b', $event)"
-                  >
-                </mat-slider>
-                <input
-                  type="number"
-                  class="number-input"
-                  [value]="patternForms[$index].get('b')?.value"
-                  (input)="onInputChange($index, 'b', $event)"
-                  min="0"
-                  max="100"
-                >
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill progress-b" [style.width.%]="patternForms[$index].get('b')?.value"></div>
-              </div>
-            </div>
-
-            <!-- パラメータ C -->
-            <div class="parameter-control">
-              <div class="parameter-header">
-                <h4>C</h4>
-              </div>
-              <div class="slider-input-row">
-                <mat-slider min="0" max="100" step="1" discrete class="slider">
-                  <input
-                    matSliderThumb
-                    [value]="patternForms[$index].get('c')?.value || 0"
-                    (valueChange)="onSliderChange($index, 'c', $event)"
-                  >
-                </mat-slider>
-                <input
-                  type="number"
-                  class="number-input"
-                  [value]="patternForms[$index].get('c')?.value"
-                  (input)="onInputChange($index, 'c', $event)"
-                  min="0"
-                  max="100"
-                >
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill progress-c" [style.width.%]="patternForms[$index].get('c')?.value"></div>
-              </div>
-            </div>
-
-            <!-- パラメータ D -->
-            <div class="parameter-control">
-              <div class="parameter-header">
-                <h4>D</h4>
-              </div>
-              <div class="slider-input-row">
-                <mat-slider min="0" max="100" step="1" discrete class="slider">
-                  <input
-                    matSliderThumb
-                    [value]="patternForms[$index].get('d')?.value || 0"
-                    (valueChange)="onSliderChange($index, 'd', $event)"
-                  >
-                </mat-slider>
-                <input
-                  type="number"
-                  class="number-input"
-                  [value]="patternForms[$index].get('d')?.value"
-                  (input)="onInputChange($index, 'd', $event)"
-                  min="0"
-                  max="100"
-                >
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill progress-d" [style.width.%]="patternForms[$index].get('d')?.value"></div>
-              </div>
-            </div>
-          </div>
-          </div>
-
           </form>
         </div>
       </div>
-      }
-    </mat-radio-group>
+    </div>
+    }
   </mat-card-content>
 </mat-card>
