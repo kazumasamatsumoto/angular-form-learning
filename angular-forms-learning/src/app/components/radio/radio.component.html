@@ -1,0 +1,18 @@
+<mat-radio-group [ngClass]="{'mat-radio-button-readonly': isReadonly }">
+  @for (radio of radios; track radio) {
+    <mat-radio-button
+      class="imo-radio-group"
+      data-test="radio-group"
+      value="{{ radio.value }}"
+      [checked]="isCheckedDefault? checkedValue.value === radio.value : false"
+      [disabled]="radio.isDisable || isDisabled"
+      (change)="onChange($event)"
+      [class.disable-radio]="radio.isDisable || isDisabled"
+    >
+    <ng-container *ngTemplateOutlet="radio.templateRef ? radio.templateRef : defaultTemplateRef"></ng-container>
+    <ng-template #defaultTemplateRef>
+      {{ radio.name | translate}}
+    </ng-template>
+  </mat-radio-button>
+  }
+</mat-radio-group>

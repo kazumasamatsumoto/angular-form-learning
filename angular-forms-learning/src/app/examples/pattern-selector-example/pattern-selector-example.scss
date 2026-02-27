@@ -3,85 +3,34 @@ mat-card {
   max-width: 1400px;
 }
 
-// 選択されたパターンの表示
-.selected-pattern-display {
-  margin-bottom: 30px;
-  padding: 20px;
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  border-radius: 8px;
-  border-left: 6px solid #66bb6a;
-
-  h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #2e7d32;
-    font-size: 18px;
-    font-weight: 600;
-  }
-
-  pre {
-    background-color: white;
-    padding: 15px;
-    border-radius: 4px;
-    overflow-x: auto;
-    margin: 0;
-    font-size: 14px;
-    border: 1px solid #81c784;
-  }
+// 各パターンの行
+.pattern-row {
+  margin-bottom: 15px;
 }
 
-// パターンセクション
-.pattern-section {
-  margin-bottom: 40px;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+// パターンカード
+.pattern-card {
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
 
-  &:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
+// パターンコンテンツ（ラジオボタン + パラメータを横並び）
+.pattern-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
 
-  // パターンごとに異なる背景色
-  &:nth-child(1) {
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    border-left: 6px solid #1976d2;
-  }
+// パターンヘッダー（ラジオボタン）
+.pattern-header {
+  min-width: 120px;
+  padding-top: 8px;
 
-  &:nth-child(2) {
-    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-    border-left: 6px solid #7b1fa2;
-  }
-
-  &:nth-child(3) {
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-    border-left: 6px solid #388e3c;
-  }
-
-  .pattern-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-
-    .pattern-title-with-radio {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-
-      mat-radio-button {
-        font-size: 16px;
-      }
-
-      h2 {
-        margin: 0;
-        font-size: 28px;
-        font-weight: 600;
-        color: #333;
-      }
-    }
-
-    .header-reset-button {
+  mat-radio-group {
+    mat-radio-button {
+      font-weight: 500;
       font-size: 14px;
     }
   }
@@ -90,80 +39,78 @@ mat-card {
 .pattern-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 // パラメータを横並びにするグリッド
 .parameters-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 8px;
+  flex: 1;
 }
 
 // 各パラメータコントロール
 .parameter-control {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px;
+  gap: 6px;
+  padding: 10px;
   background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   }
 
   .parameter-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 
     h4 {
       margin: 0;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 600;
       color: #333;
     }
-
-    .parameter-value {
-      font-size: 24px;
-      font-weight: bold;
-      background-color: white;
-      padding: 6px 14px;
-      border-radius: 20px;
-      min-width: 55px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
   }
 
-  .slider-container {
-    padding: 10px 0;
+  .slider-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
     .slider {
-      width: 100%;
+      flex: 1;
     }
-  }
 
-  .input-field {
-    width: 100%;
+    .number-input {
+      width: 60px;
+      padding: 4px 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      text-align: center;
+
+      &:focus {
+        outline: none;
+        border-color: #1976d2;
+      }
+    }
   }
 
   .progress-bar {
-    height: 28px;
+    height: 16px;
     background-color: #e0e0e0;
-    border-radius: 14px;
+    border-radius: 8px;
     overflow: hidden;
     position: relative;
 
     .progress-fill {
       height: 100%;
       transition: width 0.3s ease;
-      border-radius: 14px;
+      border-radius: 8px;
 
       // パラメータごとに異なる色
       &.progress-a {
@@ -184,105 +131,6 @@ mat-card {
     }
   }
 }
-
-// 現在の値表示
-.current-values {
-  margin-top: 15px;
-  padding: 15px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  border: 2px dashed #ccc;
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #666;
-    font-size: 14px;
-  }
-
-  pre {
-    background-color: white;
-    padding: 10px;
-    border-radius: 4px;
-    overflow-x: auto;
-    margin: 0;
-    font-size: 13px;
-  }
-}
-
-// 全パターンのサマリー
-.all-patterns-summary {
-  margin-top: 30px;
-  padding: 20px;
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border-radius: 8px;
-  border-left: 6px solid #ff9800;
-
-  h3 {
-    margin-top: 0;
-    color: #e65100;
-  }
-
-  pre {
-    background-color: white;
-    padding: 15px;
-    border-radius: 4px;
-    overflow-x: auto;
-    border: 1px solid #ffb74d;
-  }
-}
-
-// コード例
-.code-example {
-  background-color: #f5f5f5;
-  padding: 15px;
-  border-radius: 4px;
-  margin-top: 20px;
-
-  h4 {
-    margin-top: 0;
-    color: #333;
-  }
-
-  pre {
-    margin: 0;
-    overflow-x: auto;
-  }
-
-  code {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-  }
-}
-
-// 情報ボックス
-.info-box {
-  background-color: #e8eaf6;
-  padding: 15px;
-  border-radius: 4px;
-  margin-top: 20px;
-  border-left: 4px solid #3f51b5;
-
-  h4 {
-    margin-top: 0;
-    color: #283593;
-  }
-
-  ul {
-    margin: 10px 0;
-    padding-left: 20px;
-
-    li {
-      margin: 8px 0;
-      line-height: 1.6;
-
-      strong {
-        color: #3f51b5;
-      }
-    }
-  }
-}
-
 p {
   margin: 10px 0;
   color: #666;
@@ -296,22 +144,12 @@ p {
 }
 
 @media (max-width: 768px) {
-  .parameters-grid {
-    grid-template-columns: 1fr;
+  .pattern-content {
+    flex-direction: column;
   }
 
-  .pattern-section {
-    padding: 15px;
-
-    .pattern-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
-
-      .header-reset-button {
-        width: 100%;
-      }
-    }
+  .parameters-grid {
+    grid-template-columns: 1fr;
   }
 
   .parameter-control {

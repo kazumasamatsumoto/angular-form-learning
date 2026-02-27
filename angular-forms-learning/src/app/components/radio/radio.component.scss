@@ -1,0 +1,56 @@
+:host ::ng-deep {
+  .mat-mdc-radio-group {
+    display: flex;
+    flex-direction: column;
+    .mat-mdc-radio-checked {
+      .mdc-form-field {
+        .mdc-radio {
+          .mdc-radio__background {
+            .mdc-radio__outer-circle {
+              border-width: 6px;
+            }
+            .mdc-radio_inner-circle {
+              border-width: 0;
+              transform: scale(0.4);
+              background-color: #ffffff;
+            }
+          }
+        }
+      }
+    }
+
+    .mdc-label {
+      font-size: 1rem;
+      color: #0f1624;
+      padding-left: 0;
+
+      &:hover {
+        cursor: pointer
+      }
+    }
+  }
+
+  .mat-mdc-radio-button {
+    margin-bottom: 0.25rem;
+    height: 1.25rem;
+  }
+
+  .disable-radio {
+    opacity: 0.5;
+  }
+
+  .mat-radio-button-readonly {
+    pointer-events: none;
+    .mat-mdc-radio-button {
+      opacity: 0.25;
+    }
+
+    .mat-mdc-radio-checked {
+      opacity: 1;
+    }
+
+    mat-radio-button.mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__outer-circle {
+      border-color: #687692 !important;
+    }
+  }
+}

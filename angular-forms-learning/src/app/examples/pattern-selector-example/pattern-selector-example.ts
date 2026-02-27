@@ -7,6 +7,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { JsonPipe } from '@angular/common';
+import { RadioModule } from '../../components/radio/radio.module';
+import { RadioButton } from '../../components/radio/radio.component.i';
 
 // パターンデータの型定義
 interface PatternData {
@@ -30,6 +32,7 @@ interface PatternData {
     MatCardModule,
     MatButtonModule,
     MatRadioModule,
+    RadioModule,
     JsonPipe,
   ],
   templateUrl: './pattern-selector-example.html',
@@ -60,6 +63,9 @@ export class PatternSelectorExample implements OnInit {
   // 選択されたパターンのインデックス
   selectedPatternIndex: number = 0;
 
+  // ラジオボタン用のデータ
+  radioButtons: RadioButton[] = [];
+
   ngOnInit(): void {
     // 各パターンごとに独立したフォームを作成
     this.patternForms = this.patterns.map(pattern =>
@@ -70,6 +76,12 @@ export class PatternSelectorExample implements OnInit {
         d: [pattern.initialValues.d],
       })
     );
+
+    // ラジオボタン用のデータを生成
+    this.radioButtons = this.patterns.map((pattern, index) => ({
+      name: pattern.name,
+      value: index.toString(),
+    }));
   }
 
   // スライダーの値が変更されたとき
@@ -112,6 +124,16 @@ export class PatternSelectorExample implements OnInit {
   // パターンを選択
   selectPattern(index: number): void {
     this.selectedPatternIndex = index;
+  }
+
+  // ラジオボタンの変更イベント
+  onRadioChange(value: string): void {
+    this.selectedPatternIndex = parseInt(value, 10);
+  }
+
+  // 現在選択中のパターンを取得
+  get selectedPattern(): PatternData {
+    return this.patterns[this.selectedPatternIndex];
   }
 
   // 選択されたパターンの値を取得
