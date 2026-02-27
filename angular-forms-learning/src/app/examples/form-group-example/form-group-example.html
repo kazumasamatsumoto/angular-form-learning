@@ -1,0 +1,103 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>FormGroup の基本</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>FormGroupは複数のFormControlをグループ化して管理するクラスです。</p>
+
+    <div class="form-section">
+      <h3>基本的なFormGroup</h3>
+      <form [formGroup]="userForm">
+        <mat-form-field appearance="outline">
+          <mat-label>名</mat-label>
+          <input matInput formControlName="firstName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>姓</mat-label>
+          <input matInput formControlName="lastName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>メールアドレス</mat-label>
+          <input matInput formControlName="email" type="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>電話番号</mat-label>
+          <input matInput formControlName="phone">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" (click)="fillUserForm()">サンプルデータ入力</button>
+          <button mat-raised-button (click)="resetUserForm()">リセット</button>
+        </div>
+      </form>
+
+      <div class="result">
+        <h4>フォームの値:</h4>
+        <pre>{{ getUserFormValue() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>ネストされたFormGroup</h3>
+      <form [formGroup]="addressForm">
+        <div formGroupName="personalInfo">
+          <h4>個人情報</h4>
+          <mat-form-field appearance="outline">
+            <mat-label>名前</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>年齢</mat-label>
+            <input matInput formControlName="age" type="number">
+          </mat-form-field>
+        </div>
+
+        <div formGroupName="address">
+          <h4>住所</h4>
+          <mat-form-field appearance="outline">
+            <mat-label>郵便番号</mat-label>
+            <input matInput formControlName="zipCode">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>都道府県</mat-label>
+            <input matInput formControlName="prefecture">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>市区町村</mat-label>
+            <input matInput formControlName="city">
+          </mat-form-field>
+        </div>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" (click)="fillAddressForm()">一部データ入力</button>
+          <button mat-raised-button (click)="resetAddressForm()">リセット</button>
+        </div>
+      </form>
+
+      <div class="result">
+        <h4>フォームの値:</h4>
+        <pre>{{ getAddressFormValue() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="code-example">
+      <h4>コード例:</h4>
+      <pre><code>// TypeScript
+userForm = new FormGroup(&#123;
+  firstName: new FormControl(''),
+  lastName: new FormControl(''),
+&#125;);
+
+// HTML
+&lt;form [formGroup]="userForm"&gt;
+  &lt;input matInput formControlName="firstName"&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,206 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>パターン選択とパラメータ調整</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>3つのパターンが常に表示されており、それぞれ独立して4つのパラメータ（A, B, C, D）を横並びで調整できます。</p>
+
+    <!-- 各パターンを表示 -->
+    @for (pattern of patterns; track $index) {
+      <div class="pattern-section">
+        <div class="pattern-header">
+          <h2>{{ pattern.name }}</h2>
+          <button mat-raised-button color="accent" (click)="resetPattern($index)" class="header-reset-button">
+            初期値にリセット
+          </button>
+        </div>
+
+        <form [formGroup]="patternForms[$index]" class="pattern-form">
+          <!-- パラメータを横並びで表示 -->
+          <div class="parameters-grid">
+            <!-- パラメータ A -->
+            <div class="parameter-control">
+              <div class="parameter-header">
+                <h4>A</h4>
+                <span class="parameter-value">{{ patternForms[$index].get('a')?.value }}</span>
+              </div>
+              <div class="slider-container">
+                <mat-slider min="0" max="100" step="1" discrete class="slider">
+                  <input
+                    matSliderThumb
+                    [value]="patternForms[$index].get('a')?.value || 0"
+                    (valueChange)="onSliderChange($index, 'a', $event)"
+                  >
+                </mat-slider>
+              </div>
+              <mat-form-field appearance="outline" class="input-field">
+                <mat-label>値</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  [value]="patternForms[$index].get('a')?.value"
+                  (input)="onInputChange($index, 'a', $event)"
+                  min="0"
+                  max="100"
+                >
+              </mat-form-field>
+              <div class="progress-bar">
+                <div class="progress-fill progress-a" [style.width.%]="patternForms[$index].get('a')?.value"></div>
+              </div>
+            </div>
+
+            <!-- パラメータ B -->
+            <div class="parameter-control">
+              <div class="parameter-header">
+                <h4>B</h4>
+                <span class="parameter-value">{{ patternForms[$index].get('b')?.value }}</span>
+              </div>
+              <div class="slider-container">
+                <mat-slider min="0" max="100" step="1" discrete class="slider">
+                  <input
+                    matSliderThumb
+                    [value]="patternForms[$index].get('b')?.value || 0"
+                    (valueChange)="onSliderChange($index, 'b', $event)"
+                  >
+                </mat-slider>
+              </div>
+              <mat-form-field appearance="outline" class="input-field">
+                <mat-label>値</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  [value]="patternForms[$index].get('b')?.value"
+                  (input)="onInputChange($index, 'b', $event)"
+                  min="0"
+                  max="100"
+                >
+              </mat-form-field>
+              <div class="progress-bar">
+                <div class="progress-fill progress-b" [style.width.%]="patternForms[$index].get('b')?.value"></div>
+              </div>
+            </div>
+
+            <!-- パラメータ C -->
+            <div class="parameter-control">
+              <div class="parameter-header">
+                <h4>C</h4>
+                <span class="parameter-value">{{ patternForms[$index].get('c')?.value }}</span>
+              </div>
+              <div class="slider-container">
+                <mat-slider min="0" max="100" step="1" discrete class="slider">
+                  <input
+                    matSliderThumb
+                    [value]="patternForms[$index].get('c')?.value || 0"
+                    (valueChange)="onSliderChange($index, 'c', $event)"
+                  >
+                </mat-slider>
+              </div>
+              <mat-form-field appearance="outline" class="input-field">
+                <mat-label>値</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  [value]="patternForms[$index].get('c')?.value"
+                  (input)="onInputChange($index, 'c', $event)"
+                  min="0"
+                  max="100"
+                >
+              </mat-form-field>
+              <div class="progress-bar">
+                <div class="progress-fill progress-c" [style.width.%]="patternForms[$index].get('c')?.value"></div>
+              </div>
+            </div>
+
+            <!-- パラメータ D -->
+            <div class="parameter-control">
+              <div class="parameter-header">
+                <h4>D</h4>
+                <span class="parameter-value">{{ patternForms[$index].get('d')?.value }}</span>
+              </div>
+              <div class="slider-container">
+                <mat-slider min="0" max="100" step="1" discrete class="slider">
+                  <input
+                    matSliderThumb
+                    [value]="patternForms[$index].get('d')?.value || 0"
+                    (valueChange)="onSliderChange($index, 'd', $event)"
+                  >
+                </mat-slider>
+              </div>
+              <mat-form-field appearance="outline" class="input-field">
+                <mat-label>値</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  [value]="patternForms[$index].get('d')?.value"
+                  (input)="onInputChange($index, 'd', $event)"
+                  min="0"
+                  max="100"
+                >
+              </mat-form-field>
+              <div class="progress-bar">
+                <div class="progress-fill progress-d" [style.width.%]="patternForms[$index].get('d')?.value"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 現在の値の表示 -->
+          <div class="current-values">
+            <h4>{{ pattern.name }} の現在値</h4>
+            <pre>{{ getPatternValues($index) | json }}</pre>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- 全パターンの値を表示 -->
+    <div class="all-patterns-summary">
+      <h3>全パターンの値</h3>
+      <pre>{{ getAllPatternValues() | json }}</pre>
+    </div>
+
+    <div class="code-example">
+      <h4>実装のポイント:</h4>
+      <pre><code>// TypeScript
+patterns: PatternData[] = [
+  &#123; name: 'パターンA', initialValues: &#123; a: 30, b: 50, c: 60, d: 100 &#125; &#125;,
+  &#123; name: 'パターンB', initialValues: &#123; a: 25, b: 30, c: 55, d: 87 &#125; &#125;,
+  &#123; name: 'パターンC', initialValues: &#123; a: 10, b: 40, c: 70, d: 90 &#125; &#125;,
+];
+
+// 各パターンごとに独立したフォームを作成
+patternForms: FormGroup[] = [];
+
+ngOnInit(): void &#123;
+  this.patternForms = this.patterns.map(pattern =>
+    this.fb.group(&#123;
+      a: [pattern.initialValues.a],
+      b: [pattern.initialValues.b],
+      c: [pattern.initialValues.c],
+      d: [pattern.initialValues.d],
+    &#125;)
+  );
+&#125;
+
+// HTML - パラメータを横並びで表示
+&lt;div class="parameters-grid"&gt;
+  &lt;div class="parameter-control"&gt;
+    &lt;h4&gt;A&lt;/h4&gt;
+    &lt;mat-slider&gt;...&lt;/mat-slider&gt;
+  &lt;/div&gt;
+  &lt;!-- B, C, D も同様に横並び --&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="info-box">
+      <h4>機能説明:</h4>
+      <ul>
+        <li><strong>3つのパターン常時表示:</strong> パターンA、B、Cが常に画面に表示されています</li>
+        <li><strong>横並びレイアウト:</strong> A, B, C, Dのパラメータが横並びで見やすく配置</li>
+        <li><strong>独立したフォーム:</strong> 各パターンは独立したFormGroupを持ち、互いに影響しません</li>
+        <li><strong>スライダーと入力フィールド:</strong> それぞれのパラメータを視覚的・数値的に調整可能</li>
+        <li><strong>プログレスバー:</strong> 各パラメータごとに異なる色で視覚化</li>
+        <li><strong>個別リセット:</strong> 各パターンごとに初期値にリセット可能</li>
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>

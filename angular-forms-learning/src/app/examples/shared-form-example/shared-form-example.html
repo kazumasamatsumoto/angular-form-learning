@@ -1,0 +1,95 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>複数コンポーネントでのフォーム値共有</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>サービスを使用して、複数のコンポーネント間でフォームの値を共有する例です。</p>
+    <p>InputとSliderが連動して動作します。</p>
+
+    <div class="shared-form-container">
+      <!-- Input フィールド -->
+      <div class="input-section">
+        <h3>数値入力</h3>
+        <mat-form-field appearance="outline">
+          <mat-label>値を入力 (0-100)</mat-label>
+          <input
+            matInput
+            type="number"
+            [formControl]="valueControl"
+            min="0"
+            max="100"
+            (input)="onInputChange($event)"
+          >
+        </mat-form-field>
+        <p class="current-value">現在の値: {{ valueControl.value }}</p>
+      </div>
+
+      <!-- Slider -->
+      <div class="slider-section">
+        <h3>スライダー</h3>
+        <mat-slider
+          min="0"
+          max="100"
+          step="1"
+          showTickMarks
+          discrete
+        >
+          <input
+            matSliderThumb
+            [value]="valueControl.value || 0"
+            (valueChange)="onSliderChange({ value: $event })"
+          >
+        </mat-slider>
+        <p class="current-value">現在の値: {{ valueControl.value }}</p>
+      </div>
+
+      <!-- パーセンテージ表示 -->
+      <div class="percentage-section">
+        <h3>パーセンテージ表示</h3>
+        <div class="percentage-bar">
+          <div
+            class="percentage-fill"
+            [style.width.%]="valueControl.value"
+          ></div>
+        </div>
+        <p class="percentage-text">{{ valueControl.value }}%</p>
+      </div>
+    </div>
+
+    <div class="code-example">
+      <h4>実装のポイント:</h4>
+      <pre><code>// サービス (shared-form.service.ts)
+private valueSubject = new BehaviorSubject&lt;number&gt;(50);
+value$ = this.valueSubject.asObservable();
+
+setValue(value: number): void &#123;
+  this.valueSubject.next(value);
+&#125;
+
+// コンポーネント
+constructor(private sharedForm: SharedForm) &#123;&#125;
+
+ngOnInit(): void &#123;
+  // サービスの値を購読
+  this.sharedForm.value$.subscribe(value => &#123;
+    this.valueControl.setValue(value, &#123; emitEvent: false &#125;);
+  &#125;);
+
+  // FormControlの変更をサービスに通知
+  this.valueControl.valueChanges.subscribe(value => &#123;
+    this.sharedForm.setValue(value);
+  &#125;);
+&#125;</code></pre>
+    </div>
+
+    <div class="info-box">
+      <h4>仕組みの説明:</h4>
+      <ul>
+        <li><strong>BehaviorSubject:</strong> 現在の値を保持し、新しい購読者に即座に最新の値を送信</li>
+        <li><strong>Observable:</strong> 値の変更を複数のコンポーネントに通知</li>
+        <li><strong>valueChanges:</strong> FormControlの値の変更を検知</li>
+        <li><strong>emitEvent: false:</strong> 無限ループを防ぐために、値を設定するときにイベントを発行しない</li>
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,283 @@
+mat-card {
+  margin: 20px;
+  max-width: 1400px;
+}
+
+// パターンセクション
+.pattern-section {
+  margin-bottom: 40px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  // パターンごとに異なる背景色
+  &:nth-child(1) {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left: 6px solid #1976d2;
+  }
+
+  &:nth-child(2) {
+    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+    border-left: 6px solid #7b1fa2;
+  }
+
+  &:nth-child(3) {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-left: 6px solid #388e3c;
+  }
+
+  .pattern-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .header-reset-button {
+      font-size: 14px;
+    }
+  }
+}
+
+.pattern-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// パラメータを横並びにするグリッド
+.parameters-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+// 各パラメータコントロール
+.parameter-control {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .parameter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    h4 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .parameter-value {
+      font-size: 24px;
+      font-weight: bold;
+      background-color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      min-width: 55px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .slider-container {
+    padding: 10px 0;
+
+    .slider {
+      width: 100%;
+    }
+  }
+
+  .input-field {
+    width: 100%;
+  }
+
+  .progress-bar {
+    height: 28px;
+    background-color: #e0e0e0;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+
+    .progress-fill {
+      height: 100%;
+      transition: width 0.3s ease;
+      border-radius: 14px;
+
+      // パラメータごとに異なる色
+      &.progress-a {
+        background: linear-gradient(90deg, #2196f3, #64b5f6);
+      }
+
+      &.progress-b {
+        background: linear-gradient(90deg, #4caf50, #81c784);
+      }
+
+      &.progress-c {
+        background: linear-gradient(90deg, #ff9800, #ffb74d);
+      }
+
+      &.progress-d {
+        background: linear-gradient(90deg, #f44336, #e57373);
+      }
+    }
+  }
+}
+
+// 現在の値表示
+.current-values {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  border: 2px dashed #ccc;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 14px;
+  }
+
+  pre {
+    background-color: white;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0;
+    font-size: 13px;
+  }
+}
+
+// 全パターンのサマリー
+.all-patterns-summary {
+  margin-top: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border-radius: 8px;
+  border-left: 6px solid #ff9800;
+
+  h3 {
+    margin-top: 0;
+    color: #e65100;
+  }
+
+  pre {
+    background-color: white;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    border: 1px solid #ffb74d;
+  }
+}
+
+// コード例
+.code-example {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 20px;
+
+  h4 {
+    margin-top: 0;
+    color: #333;
+  }
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+  }
+}
+
+// 情報ボックス
+.info-box {
+  background-color: #e8eaf6;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 20px;
+  border-left: 4px solid #3f51b5;
+
+  h4 {
+    margin-top: 0;
+    color: #283593;
+  }
+
+  ul {
+    margin: 10px 0;
+    padding-left: 20px;
+
+    li {
+      margin: 8px 0;
+      line-height: 1.6;
+
+      strong {
+        color: #3f51b5;
+      }
+    }
+  }
+}
+
+p {
+  margin: 10px 0;
+  color: #666;
+}
+
+// レスポンシブ対応
+@media (max-width: 1200px) {
+  .parameters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .parameters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pattern-section {
+    padding: 15px;
+
+    .pattern-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+
+      .header-reset-button {
+        width: 100%;
+      }
+    }
+  }
+
+  .parameter-control {
+    padding: 15px;
+  }
+}

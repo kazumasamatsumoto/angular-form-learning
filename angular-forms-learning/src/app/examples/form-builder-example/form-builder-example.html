@@ -1,0 +1,156 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>FormBuilder の基本</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>FormBuilderは、より簡潔な構文でフォームを作成できる便利なサービスです。</p>
+
+    <div class="form-section">
+      <h3>基本的なFormBuilder</h3>
+      <form [formGroup]="profileForm">
+        <mat-form-field appearance="outline">
+          <mat-label>名前</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>メールアドレス</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>年齢</mat-label>
+          <input matInput formControlName="age" type="number">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" (click)="fillProfileForm()">サンプルデータ入力</button>
+          <button mat-raised-button (click)="resetProfileForm()">リセット</button>
+        </div>
+      </form>
+
+      <div class="result">
+        <h4>フォームの値:</h4>
+        <pre>{{ getProfileValue() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>バリデーション付きフォーム</h3>
+      <form [formGroup]="registrationForm">
+        <mat-form-field appearance="outline">
+          <mat-label>ユーザー名</mat-label>
+          <input matInput formControlName="username">
+          @if (registrationForm.get('username')?.hasError('required') && registrationForm.get('username')?.touched) {
+            <mat-error>ユーザー名は必須です</mat-error>
+          }
+          @if (registrationForm.get('username')?.hasError('minlength')) {
+            <mat-error>最低3文字必要です</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>メールアドレス</mat-label>
+          <input matInput formControlName="email" type="email">
+          @if (registrationForm.get('email')?.hasError('required') && registrationForm.get('email')?.touched) {
+            <mat-error>メールアドレスは必須です</mat-error>
+          }
+          @if (registrationForm.get('email')?.hasError('email')) {
+            <mat-error>有効なメールアドレスを入力してください</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>パスワード</mat-label>
+          <input matInput formControlName="password" type="password">
+          @if (registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched) {
+            <mat-error>パスワードは必須です</mat-error>
+          }
+          @if (registrationForm.get('password')?.hasError('minlength')) {
+            <mat-error>最低8文字必要です</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-checkbox formControlName="agreeToTerms">
+          利用規約に同意する
+        </mat-checkbox>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" (click)="fillRegistrationForm()">サンプルデータ入力</button>
+          <button mat-raised-button (click)="resetRegistrationForm()">リセット</button>
+        </div>
+      </form>
+
+      <div class="result">
+        <h4>フォームの状態:</h4>
+        <p>バリデーション結果: {{ isRegistrationFormValid() ? '✓ 有効' : '✗ 無効' }}</p>
+        <h4>フォームの値:</h4>
+        <pre>{{ getRegistrationValue() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>FormArray（動的フォーム）</h3>
+      <form [formGroup]="skillsForm">
+        <div formGroupName="personalInfo">
+          <mat-form-field appearance="outline">
+            <mat-label>名前</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>職業</mat-label>
+            <input matInput formControlName="occupation">
+          </mat-form-field>
+        </div>
+
+        <h4>スキル一覧</h4>
+        <div formArrayName="skills">
+          @for (skill of skills.controls; track $index) {
+            <div [formGroupName]="$index" class="skill-item">
+              <mat-form-field appearance="outline">
+                <mat-label>スキル名</mat-label>
+                <input matInput formControlName="skillName">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>レベル</mat-label>
+                <input matInput formControlName="level">
+              </mat-form-field>
+
+              <button mat-icon-button color="warn" (click)="removeSkill($index)" [disabled]="skills.length === 1">
+                削除
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="button-group">
+          <button mat-raised-button color="accent" (click)="addSkill()">スキル追加</button>
+          <button mat-raised-button (click)="resetSkillsForm()">リセット</button>
+        </div>
+      </form>
+
+      <div class="result">
+        <h4>フォームの値:</h4>
+        <pre>{{ getSkillsValue() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="code-example">
+      <h4>コード例:</h4>
+      <pre><code>// TypeScript
+constructor(private fb: FormBuilder) &#123;&#125;
+
+profileForm = this.fb.group(&#123;
+  name: [''],
+  email: ['', [Validators.required, Validators.email]],
+&#125;);
+
+// HTML
+&lt;form [formGroup]="profileForm"&gt;
+  &lt;input matInput formControlName="name"&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+  </mat-card-content>
+</mat-card>

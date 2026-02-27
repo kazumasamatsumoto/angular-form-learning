@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.app-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.sidenav-container {
+  flex: 1;
+}
+
+.sidenav {
+  width: 250px;
+  border-right: 1px solid #e0e0e0;
+
+  .active-link {
+    background-color: rgba(63, 81, 181, 0.1);
+    color: #3f51b5;
+  }
+}
+
+.main-content {
+  padding: 20px;
+  overflow-y: auto;
+}

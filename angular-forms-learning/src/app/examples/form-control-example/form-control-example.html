@@ -1,0 +1,42 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>FormControl の基本</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>FormControlは単一のフォームコントロール（input、select等）を管理するクラスです。</p>
+
+    <div class="form-section">
+      <h3>基本的な使い方</h3>
+
+      <mat-form-field appearance="outline">
+        <mat-label>名前</mat-label>
+        <input matInput [formControl]="nameControl" placeholder="名前を入力">
+      </mat-form-field>
+      <p>入力値: {{ getName() }}</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>メールアドレス</mat-label>
+        <input matInput [formControl]="emailControl" placeholder="メールアドレスを入力">
+      </mat-form-field>
+      <p>入力値: {{ getEmail() }}</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>年齢</mat-label>
+        <input matInput type="number" [formControl]="ageControl" placeholder="年齢を入力">
+      </mat-form-field>
+      <p>入力値: {{ getAge() }}</p>
+
+      <button mat-raised-button color="primary" (click)="resetForm()">リセット</button>
+    </div>
+
+    <div class="code-example">
+      <h4>コード例:</h4>
+      <pre><code>// TypeScript
+nameControl = new FormControl('');
+emailControl = new FormControl('example&#64;example.com');
+
+// HTML
+&lt;input matInput [formControl]="nameControl"&gt;</code></pre>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,134 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>バリデーション（Validators）</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Angularには豊富な組み込みバリデータとカスタムバリデータを作成する機能があります。</p>
+
+    <!-- 組み込みバリデータ -->
+    <div class="form-section">
+      <h3>組み込みバリデータ</h3>
+      <form [formGroup]="builtInValidatorsForm">
+        <mat-form-field appearance="outline">
+          <mat-label>必須項目 (required)</mat-label>
+          <input matInput formControlName="required">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'required') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>メール (email)</mat-label>
+          <input matInput formControlName="email" type="email">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'email') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>最小文字数 (minLength: 5)</mat-label>
+          <input matInput formControlName="minLength">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'minLength') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>最大文字数 (maxLength: 10)</mat-label>
+          <input matInput formControlName="maxLength">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'maxLength') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>パターン (数字のみ)</mat-label>
+          <input matInput formControlName="pattern">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'pattern') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>最小値 (min: 18)</mat-label>
+          <input matInput formControlName="min" type="number">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'min') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>最大値 (max: 100)</mat-label>
+          <input matInput formControlName="max" type="number">
+          <mat-error>{{ getErrorMessage(builtInValidatorsForm, 'max') }}</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button (click)="resetBuiltInForm()">リセット</button>
+      </form>
+
+      <div class="result">
+        <p>フォーム状態: {{ builtInValidatorsForm.valid ? '✓ 有効' : '✗ 無効' }}</p>
+        <pre>{{ getBuiltInValidatorsValue() | json }}</pre>
+      </div>
+    </div>
+
+    <!-- カスタムバリデータ -->
+    <div class="form-section">
+      <h3>カスタムバリデータ</h3>
+      <form [formGroup]="customValidatorsForm">
+        <mat-form-field appearance="outline">
+          <mat-label>ユーザー名 (admin, root, test は禁止)</mat-label>
+          <input matInput formControlName="username">
+          <mat-error>{{ getErrorMessage(customValidatorsForm, 'username') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>電話番号 (0XX-XXXX-XXXX)</mat-label>
+          <input matInput formControlName="phone" placeholder="090-1234-5678">
+          <mat-error>{{ getErrorMessage(customValidatorsForm, 'phone') }}</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button (click)="resetCustomForm()">リセット</button>
+      </form>
+
+      <div class="result">
+        <p>フォーム状態: {{ customValidatorsForm.valid ? '✓ 有効' : '✗ 無効' }}</p>
+        <pre>{{ getCustomValidatorsValue() | json }}</pre>
+      </div>
+    </div>
+
+    <!-- パスワード確認 -->
+    <div class="form-section">
+      <h3>フォームグループレベルのバリデータ</h3>
+      <form [formGroup]="passwordForm">
+        <mat-form-field appearance="outline">
+          <mat-label>パスワード (8文字以上)</mat-label>
+          <input matInput formControlName="password" type="password">
+          <mat-error>{{ getErrorMessage(passwordForm, 'password') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>パスワード確認</mat-label>
+          <input matInput formControlName="confirmPassword" type="password">
+          <mat-error>{{ getErrorMessage(passwordForm, 'confirmPassword') }}</mat-error>
+        </mat-form-field>
+
+        @if (getPasswordError()) {
+          <div class="form-error">{{ getPasswordError() }}</div>
+        }
+
+        <button mat-raised-button (click)="resetPasswordForm()">リセット</button>
+      </form>
+
+      <div class="result">
+        <p>フォーム状態: {{ passwordForm.valid ? '✓ 有効' : '✗ 無効' }}</p>
+        <pre>{{ getPasswordFormValue() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="code-example">
+      <h4>カスタムバリデータのコード例:</h4>
+      <pre><code>function forbiddenWordValidator(words: string[]): ValidatorFn &#123;
+  return (control: AbstractControl): ValidationErrors | null => &#123;
+    const hasForbidden = words.some(w =>
+      control.value?.includes(w)
+    );
+    return hasForbidden ? &#123; forbiddenWord: true &#125; : null;
+  &#125;;
+&#125;
+
+// 使用例
+this.fb.group(&#123;
+  username: ['', forbiddenWordValidator(['admin', 'root'])]
+&#125;);</code></pre>
+    </div>
+  </mat-card-content>
+</mat-card>
