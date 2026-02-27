@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
 import { JsonPipe } from '@angular/common';
 
 // パターンデータの型定義
@@ -22,11 +23,13 @@ interface PatternData {
   selector: 'app-pattern-selector-example',
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     MatSliderModule,
     MatInputModule,
     MatFormFieldModule,
     MatCardModule,
     MatButtonModule,
+    MatRadioModule,
     JsonPipe,
   ],
   templateUrl: './pattern-selector-example.html',
@@ -53,6 +56,9 @@ export class PatternSelectorExample implements OnInit {
 
   // 各パターンのフォーム
   patternForms: FormGroup[] = [];
+
+  // 選択されたパターンのインデックス
+  selectedPatternIndex: number = 0;
 
   ngOnInit(): void {
     // 各パターンごとに独立したフォームを作成
@@ -101,5 +107,18 @@ export class PatternSelectorExample implements OnInit {
       pattern: pattern.name,
       values: this.getPatternValues(index)
     }));
+  }
+
+  // パターンを選択
+  selectPattern(index: number): void {
+    this.selectedPatternIndex = index;
+  }
+
+  // 選択されたパターンの値を取得
+  getSelectedPatternValues() {
+    return {
+      selectedPattern: this.patterns[this.selectedPatternIndex].name,
+      values: this.getPatternValues(this.selectedPatternIndex)
+    };
   }
 }

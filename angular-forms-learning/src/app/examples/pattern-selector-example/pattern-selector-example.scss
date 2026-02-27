@@ -3,6 +3,33 @@ mat-card {
   max-width: 1400px;
 }
 
+// 選択されたパターンの表示
+.selected-pattern-display {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-radius: 8px;
+  border-left: 6px solid #66bb6a;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #2e7d32;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  pre {
+    background-color: white;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0;
+    font-size: 14px;
+    border: 1px solid #81c784;
+  }
+}
+
 // パターンセクション
 .pattern-section {
   margin-bottom: 40px;
@@ -37,11 +64,21 @@ mat-card {
     align-items: center;
     margin-bottom: 25px;
 
-    h2 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 600;
-      color: #333;
+    .pattern-title-with-radio {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      mat-radio-button {
+        font-size: 16px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+      }
     }
 
     .header-reset-button {

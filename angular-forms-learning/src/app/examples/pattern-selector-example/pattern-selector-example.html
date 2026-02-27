@@ -3,17 +3,27 @@
     <mat-card-title>パターン選択とパラメータ調整</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p>3つのパターンが常に表示されており、それぞれ独立して4つのパラメータ（A, B, C, D）を横並びで調整できます。</p>
+    <p>3つのパターンが常に表示されており、それぞれ独立して4つのパラメータ（A, B, C, D）を横並びで調整できます。ラジオボタンで使用するパターンを選択してください。</p>
+
+    <!-- 選択されたパターンの値を表示 -->
+    <div class="selected-pattern-display">
+      <h3>選択中のパターン</h3>
+      <pre>{{ getSelectedPatternValues() | json }}</pre>
+    </div>
 
     <!-- 各パターンを表示 -->
-    @for (pattern of patterns; track $index) {
-      <div class="pattern-section">
-        <div class="pattern-header">
-          <h2>{{ pattern.name }}</h2>
-          <button mat-raised-button color="accent" (click)="resetPattern($index)" class="header-reset-button">
-            初期値にリセット
-          </button>
-        </div>
+    <mat-radio-group [(ngModel)]="selectedPatternIndex" (change)="selectPattern($event.value)">
+      @for (pattern of patterns; track $index) {
+        <div class="pattern-section">
+          <div class="pattern-header">
+            <div class="pattern-title-with-radio">
+              <mat-radio-button [value]="$index"></mat-radio-button>
+              <h2>{{ pattern.name }}</h2>
+            </div>
+            <button mat-raised-button color="accent" (click)="resetPattern($index)" class="header-reset-button">
+              初期値にリセット
+            </button>
+          </div>
 
         <form [formGroup]="patternForms[$index]" class="pattern-form">
           <!-- パラメータを横並びで表示 -->
@@ -149,8 +159,9 @@
             <pre>{{ getPatternValues($index) | json }}</pre>
           </div>
         </form>
-      </div>
-    }
+        </div>
+      }
+    </mat-radio-group>
 
     <!-- 全パターンの値を表示 -->
     <div class="all-patterns-summary">
@@ -194,6 +205,8 @@ ngOnInit(): void &#123;
     <div class="info-box">
       <h4>機能説明:</h4>
       <ul>
+        <li><strong>パターン選択:</strong> ラジオボタンで使用するパターンを選択できます</li>
+        <li><strong>選択パターンの値表示:</strong> 現在選択されているパターンの値がリアルタイムで表示されます</li>
         <li><strong>3つのパターン常時表示:</strong> パターンA、B、Cが常に画面に表示されています</li>
         <li><strong>横並びレイアウト:</strong> A, B, C, Dのパラメータが横並びで見やすく配置</li>
         <li><strong>独立したフォーム:</strong> 各パターンは独立したFormGroupを持ち、互いに影響しません</li>
