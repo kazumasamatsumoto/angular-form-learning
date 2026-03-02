@@ -3,10 +3,6 @@ mat-card {
   max-width: 1400px;
 }
 
-// imo-radioを非表示にする（データ管理のみに使用）
-::ng-deep .hidden-radio-group {
-  display: none;
-}
 
 // パターンコンテンツ（ラジオボタン + パラメータを横並び）
 .pattern-content {
@@ -15,52 +11,18 @@ mat-card {
   align-items: flex-start;
 }
 
-// ラジオボタン表示エリア（見た目用）
+// Angular Material ラジオボタンエリア
 .radio-display {
   min-width: 120px;
   padding-top: 8px;
-}
 
-.radio-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-
-  .radio-circle {
-    width: 18px;
-    height: 18px;
-    border: 2px solid #5f6368;
-    border-radius: 50%;
-    position: relative;
-    transition: border-color 0.2s;
-
-    &.selected {
-      border-color: #1976d2;
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 10px;
-        height: 10px;
-        background-color: #1976d2;
-        border-radius: 50%;
-      }
-    }
+  mat-radio-group {
+    display: block;
   }
 
-  .radio-label {
+  mat-radio-button {
     font-weight: 500;
     font-size: 14px;
-    color: #333;
-  }
-
-  &:hover .radio-circle {
-    border-color: #1976d2;
   }
 }
 
@@ -128,15 +90,29 @@ mat-card {
 
     .number-input {
       width: 60px;
-      padding: 4px 6px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      text-align: center;
 
-      &:focus {
-        outline: none;
-        border-color: #1976d2;
+      input[type="number"] {
+        width: 100%;
+        padding: 4px 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        text-align: center;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: #1976d2;
+        }
+
+        // Remove number input arrows
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        -moz-appearance: textfield;
       }
     }
   }

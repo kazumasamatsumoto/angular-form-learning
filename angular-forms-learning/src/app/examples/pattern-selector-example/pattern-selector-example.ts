@@ -7,8 +7,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { JsonPipe } from '@angular/common';
-import { RadioModule } from '../../components/radio/radio.module';
-import { RadioButton } from '../../components/radio/radio.component.i';
 
 // パターンデータの型定義
 interface PatternData {
@@ -32,7 +30,6 @@ interface PatternData {
     MatCardModule,
     MatButtonModule,
     MatRadioModule,
-    RadioModule,
   ],
   templateUrl: './pattern-selector-example.html',
   styleUrl: './pattern-selector-example.scss',
@@ -62,9 +59,6 @@ export class PatternSelectorExample implements OnInit {
   // 選択されたパターンのインデックス
   selectedPatternIndex: number = 0;
 
-  // ラジオボタン用のデータ
-  radioButtons: RadioButton[] = [];
-
   ngOnInit(): void {
     // 各パターンごとに独立したフォームを作成
     this.patternForms = this.patterns.map(pattern =>
@@ -75,25 +69,6 @@ export class PatternSelectorExample implements OnInit {
         d: [pattern.initialValues.d],
       })
     );
-
-    // ラジオボタン用のデータを生成
-    this.radioButtons = this.patterns.map((pattern, index) => ({
-      name: pattern.name,
-      value: index.toString(),
-    }));
-  }
-
-  // スライダーの値が変更されたとき
-  onSliderChange(patternIndex: number, paramName: string, value: number): void {
-    this.patternForms[patternIndex].get(paramName)?.setValue(value, { emitEvent: false });
-  }
-
-  // 入力フィールドの値が変更されたとき
-  onInputChange(patternIndex: number, paramName: string, event: any): void {
-    const value = Number(event.target.value);
-    if (!isNaN(value) && value >= 0 && value <= 100) {
-      this.patternForms[patternIndex].get(paramName)?.setValue(value, { emitEvent: false });
-    }
   }
 
   // パターンの値を取得
@@ -112,28 +87,13 @@ export class PatternSelectorExample implements OnInit {
     });
   }
 
-  // 全パターンの値を取得
+  // 全パターンの値を取得（一括登録用）
   getAllPatternValues() {
     return this.patterns.map((pattern, index) => ({
       pattern: pattern.name,
+      enabled: this.selectedPatternIndex === index,
       values: this.getPatternValues(index)
     }));
-  }
-
-  // パターンを選択
-  selectPattern(index: number): void {
-    this.selectedPatternIndex = index;
-    // imo-radioの値も同期させる必要がある場合はここで処理
-  }
-
-  // ラジオボタンの変更イベント
-  onRadioChange(value: string): void {
-    this.selectedPatternIndex = parseInt(value, 10);
-  }
-
-  // 現在選択中のパターンを取得
-  get selectedPattern(): PatternData {
-    return this.patterns[this.selectedPatternIndex];
   }
 
   // 選択されたパターンの値を取得
