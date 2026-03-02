@@ -12,7 +12,7 @@
     @for (pattern of patterns; track $index) {
       <div class="pattern-row">
         <!-- パターンカード -->
-        <div class="pattern-card">
+        <div class="pattern-card" [class.selected]="selectedPatternIndex === $index">
           <div class="pattern-content">
             <!-- Angular Material ラジオボタン -->
             <div class="radio-display">

@@ -29,6 +29,12 @@ p {
   border-radius: 8px;
   border: 1px solid #ddd;
   background-color: white;
+  transition: border-color 0.3s ease;
+
+  &.selected {
+    border-color: #1976d2;
+    border-width: 2px;
+  }
 }
 
 // パターンコンテンツ（ラジオボタン + パラメータを横並び）
