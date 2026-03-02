@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
-import { JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 // パターンデータの型定義
 interface PatternData {
@@ -22,6 +22,7 @@ interface PatternData {
 @Component({
   selector: 'app-pattern-selector-example',
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     FormsModule,
     MatSliderModule,
@@ -84,6 +85,13 @@ export class PatternSelectorExample implements OnInit {
       b: pattern.initialValues.b,
       c: pattern.initialValues.c,
       d: pattern.initialValues.d,
+    });
+  }
+
+  // スライダーの値が変更されたときにフォームを更新
+  updateValue(patternIndex: number, field: string, value: number): void {
+    this.patternForms[patternIndex].patchValue({
+      [field]: value
     });
   }
 

@@ -21,16 +21,16 @@
           </div>
 
           <!-- パラメータグリッド -->
-          <form [formGroup]="patternForms[$index]" class="pattern-form">
+          <div class="pattern-form" [formGroup]="patternForms[$index]">
             <div class="parameters-grid">
               <!-- パラメータ A -->
-              <div class="parameter-control" [formGroup]="patternForms[$index]">
+              <div class="parameter-control">
                 <div class="parameter-header">
                   <h4>A</h4>
                 </div>
                 <div class="slider-input-row">
                   <mat-slider min="0" max="100" step="1" discrete class="slider">
-                    <input matSliderThumb formControlName="a">
+                    <input matSliderThumb [value]="patternForms[$index].get('a')?.value || 0" (valueChange)="updateValue($index, 'a', $event)">
                   </mat-slider>
                   <div class="number-input">
                     <input type="number" formControlName="a" min="0" max="100">
@@ -40,13 +40,13 @@
               </div>
 
               <!-- パラメータ B -->
-              <div class="parameter-control" [formGroup]="patternForms[$index]">
+              <div class="parameter-control">
                 <div class="parameter-header">
                   <h4>B</h4>
                 </div>
                 <div class="slider-input-row">
                   <mat-slider min="0" max="100" step="1" discrete class="slider">
-                    <input matSliderThumb formControlName="b">
+                    <input matSliderThumb [value]="patternForms[$index].get('b')?.value || 0" (valueChange)="updateValue($index, 'b', $event)">
                   </mat-slider>
                   <div class="number-input">
                     <input type="number" formControlName="b" min="0" max="100">
@@ -56,13 +56,13 @@
               </div>
 
               <!-- パラメータ C -->
-              <div class="parameter-control" [formGroup]="patternForms[$index]">
+              <div class="parameter-control">
                 <div class="parameter-header">
                   <h4>C</h4>
                 </div>
                 <div class="slider-input-row">
                   <mat-slider min="0" max="100" step="1" discrete class="slider">
-                    <input matSliderThumb formControlName="c">
+                    <input matSliderThumb [value]="patternForms[$index].get('c')?.value || 0" (valueChange)="updateValue($index, 'c', $event)">
                   </mat-slider>
                   <div class="number-input">
                     <input type="number" formControlName="c" min="0" max="100">
@@ -72,13 +72,13 @@
               </div>
 
               <!-- パラメータ D -->
-              <div class="parameter-control" [formGroup]="patternForms[$index]">
+              <div class="parameter-control">
                 <div class="parameter-header">
                   <h4>D</h4>
                 </div>
                 <div class="slider-input-row">
                   <mat-slider min="0" max="100" step="1" discrete class="slider">
-                    <input matSliderThumb formControlName="d">
+                    <input matSliderThumb [value]="patternForms[$index].get('d')?.value || 0" (valueChange)="updateValue($index, 'd', $event)">
                   </mat-slider>
                   <div class="number-input">
                     <input type="number" formControlName="d" min="0" max="100">
@@ -87,7 +87,7 @@
 
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
