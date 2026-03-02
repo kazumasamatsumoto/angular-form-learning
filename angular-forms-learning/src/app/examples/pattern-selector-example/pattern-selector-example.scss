@@ -1,8 +1,35 @@
+// ページ全体の背景
+:host {
+  display: block;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+// カード全体
 mat-card {
   margin: 20px;
   max-width: 1400px;
+  background-color: white;
 }
 
+// 説明文
+p {
+  margin: 10px 0;
+  color: #666;
+}
+
+// パターン行（各パターンのコンテナ）
+.pattern-row {
+  margin-bottom: 15px;
+}
+
+// パターンカード（背景付きコンテナ）
+.pattern-card {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: white;
+}
 
 // パターンコンテンツ（ラジオボタン + パラメータを横並び）
 .pattern-content {
@@ -11,10 +38,12 @@ mat-card {
   align-items: flex-start;
 }
 
-// Angular Material ラジオボタンエリア
+// ラジオボタンエリア
 .radio-display {
   min-width: 120px;
-  padding-top: 8px;
+  align-self: flex-start;
+  margin-top: -12px;
+  margin-left: -12px;
 
   mat-radio-group {
     display: block;
@@ -26,131 +55,76 @@ mat-card {
   }
 }
 
-// 各パターンの行
-.pattern-row {
-  margin-bottom: 15px;
-}
-
-// パターンカード
-.pattern-card {
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-}
-
+// パラメータフォーム
 .pattern-form {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
-// パラメータを横並びにするグリッド
+// パラメータグリッド（A, B, C, D を横並び）
 .parameters-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  flex: 1;
 }
 
-// 各パラメータコントロール
+// 各パラメータコントロール（A, B, C, D それぞれ）
 .parameter-control {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+}
 
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-  }
+// パラメータヘッダー（A, B, C, D のラベル）
+.parameter-header {
+  margin-bottom: 4px;
 
-  .parameter-header {
-    margin-bottom: 4px;
-
-    h4 {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-    }
-  }
-
-  .slider-input-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    .slider {
-      flex: 1;
-    }
-
-    .number-input {
-      width: 60px;
-
-      input[type="number"] {
-        width: 100%;
-        padding: 4px 6px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        text-align: center;
-        box-sizing: border-box;
-
-        &:focus {
-          outline: none;
-          border-color: #1976d2;
-        }
-
-        // Remove number input arrows
-        &::-webkit-inner-spin-button,
-        &::-webkit-outer-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-
-        -moz-appearance: textfield;
-      }
-    }
-  }
-
-  .progress-bar {
-    height: 16px;
-    background-color: #e0e0e0;
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-
-    .progress-fill {
-      height: 100%;
-      transition: width 0.3s ease;
-      border-radius: 8px;
-
-      // パラメータごとに異なる色
-      &.progress-a {
-        background: linear-gradient(90deg, #2196f3, #64b5f6);
-      }
-
-      &.progress-b {
-        background: linear-gradient(90deg, #4caf50, #81c784);
-      }
-
-      &.progress-c {
-        background: linear-gradient(90deg, #ff9800, #ffb74d);
-      }
-
-      &.progress-d {
-        background: linear-gradient(90deg, #f44336, #e57373);
-      }
-    }
+  h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
   }
 }
-p {
-  margin: 10px 0;
-  color: #666;
+
+// スライダーとインプットの横並び行
+.slider-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// スライダー
+.slider {
+  flex: 1;
+}
+
+// 数値インプット
+.number-input {
+  width: 60px;
+
+  input[type="number"] {
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+
+    // 数値インプットの矢印を非表示
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    -moz-appearance: textfield;
+  }
 }
 
 // レスポンシブ対応
