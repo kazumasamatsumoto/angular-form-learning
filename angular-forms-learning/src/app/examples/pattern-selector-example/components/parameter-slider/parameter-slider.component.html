@@ -1,0 +1,22 @@
+<div class="parameter-control">
+  <div class="parameter-header">
+    <h4>{{ label }}</h4>
+  </div>
+  <div class="slider-input-row">
+    <mat-slider [min]="min" [max]="max" [step]="step" discrete class="slider">
+      <input
+        matSliderThumb
+        [value]="control.value"
+        (valueChange)="updateValue($event)"
+      />
+    </mat-slider>
+    <div class="number-input">
+      <input
+        type="number"
+        [formControl]="control"
+        [min]="min"
+        [max]="max"
+      />
+    </div>
+  </div>
+</div>

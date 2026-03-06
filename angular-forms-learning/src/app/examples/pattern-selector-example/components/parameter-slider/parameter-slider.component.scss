@@ -1,0 +1,59 @@
+// 各パラメータコントロール
+.parameter-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+// パラメータヘッダー（ラベル）
+.parameter-header {
+  margin-bottom: 4px;
+
+  h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+// スライダーとインプットの横並び行
+.slider-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// スライダー
+.slider {
+  flex: 1;
+}
+
+// 数値インプット
+.number-input {
+  width: 60px;
+
+  input[type="number"] {
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+
+    // 数値インプットの矢印を非表示
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    -moz-appearance: textfield;
+  }
+}

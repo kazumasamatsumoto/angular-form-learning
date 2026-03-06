@@ -55,43 +55,13 @@ export class PatternSelectorExampleModule implements OnInit {
     );
   }
 
+  // パターン選択のハンドラー
+  onPatternSelect = (index: number): void => {
+    this.selectedPatternIndex = index;
+  };
+
   // パターンの値を取得
   getPatternValues(patternIndex: number) {
     return this.patternForms[patternIndex].value;
-  }
-
-  // パターンをリセット
-  resetPattern(patternIndex: number): void {
-    const pattern = this.patterns[patternIndex];
-    this.patternForms[patternIndex].patchValue({
-      a: pattern.initialValues.a,
-      b: pattern.initialValues.b,
-      c: pattern.initialValues.c,
-      d: pattern.initialValues.d,
-    });
-  }
-
-  // スライダーの値が変更されたときにフォームを更新
-  updateValue(patternIndex: number, field: string, value: number): void {
-    this.patternForms[patternIndex].patchValue({
-      [field]: value
-    });
-  }
-
-  // 全パターンの値を取得（一括登録用）
-  getAllPatternValues() {
-    return this.patterns.map((pattern, index) => ({
-      pattern: pattern.name,
-      enabled: this.selectedPatternIndex === index,
-      values: this.getPatternValues(index)
-    }));
-  }
-
-  // 選択されたパターンの値を取得
-  getSelectedPatternValues() {
-    return {
-      selectedPattern: this.patterns[this.selectedPatternIndex].name,
-      values: this.getPatternValues(this.selectedPatternIndex)
-    };
   }
 }

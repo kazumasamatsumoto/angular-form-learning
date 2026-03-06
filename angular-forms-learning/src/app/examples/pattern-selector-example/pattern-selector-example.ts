@@ -1,12 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
+import { PatternCardComponent } from './components/pattern-card/pattern-card.component';
 
 // パターンデータの型定義
 interface PatternData {
@@ -23,14 +19,8 @@ interface PatternData {
   selector: 'app-pattern-selector-example',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatSliderModule,
-    MatInputModule,
-    MatFormFieldModule,
     MatCardModule,
-    MatButtonModule,
-    MatRadioModule,
+    PatternCardComponent,
   ],
   templateUrl: './pattern-selector-example.html',
   styleUrl: './pattern-selector-example.scss',
@@ -77,38 +67,8 @@ export class PatternSelectorExample implements OnInit {
     return this.patternForms[patternIndex].value;
   }
 
-  // パターンをリセット
-  resetPattern(patternIndex: number): void {
-    const pattern = this.patterns[patternIndex];
-    this.patternForms[patternIndex].patchValue({
-      a: pattern.initialValues.a,
-      b: pattern.initialValues.b,
-      c: pattern.initialValues.c,
-      d: pattern.initialValues.d,
-    });
-  }
-
-  // スライダーの値が変更されたときにフォームを更新
-  updateValue(patternIndex: number, field: string, value: number): void {
-    this.patternForms[patternIndex].patchValue({
-      [field]: value
-    });
-  }
-
-  // 全パターンの値を取得（一括登録用）
-  getAllPatternValues() {
-    return this.patterns.map((pattern, index) => ({
-      pattern: pattern.name,
-      enabled: this.selectedPatternIndex === index,
-      values: this.getPatternValues(index)
-    }));
-  }
-
-  // 選択されたパターンの値を取得
-  getSelectedPatternValues() {
-    return {
-      selectedPattern: this.patterns[this.selectedPatternIndex].name,
-      values: this.getPatternValues(this.selectedPatternIndex)
-    };
-  }
+  // パターン選択のハンドラー
+  onPatternSelect = (index: number): void => {
+    this.selectedPatternIndex = index;
+  };
 }

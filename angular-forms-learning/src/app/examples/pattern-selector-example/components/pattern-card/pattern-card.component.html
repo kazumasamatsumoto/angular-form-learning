@@ -1,0 +1,41 @@
+<div class="pattern-card" [class.selected]="isSelected">
+  <div class="pattern-content">
+    <!-- ラジオボタンエリア -->
+    <div class="radio-display">
+      <mat-radio-group [ngModel]="selectedPatternIndex" (ngModelChange)="onPatternSelect($event)">
+        <mat-radio-button [value]="patternIndex">
+          {{ patternName }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- パラメータグリッド -->
+    <div class="pattern-form">
+      <div class="parameters-grid">
+        <!-- パラメータ A -->
+        <app-parameter-slider
+          [control]="getControl('a')"
+          label="× Stop Rate"
+        />
+
+        <!-- パラメータ B -->
+        <app-parameter-slider
+          [control]="getControl('b')"
+          label="△ Stop Rate"
+        />
+
+        <!-- パラメータ C -->
+        <app-parameter-slider
+          [control]="getControl('c')"
+          label="× Acceptance Rate"
+        />
+
+        <!-- パラメータ D -->
+        <app-parameter-slider
+          [control]="getControl('d')"
+          label="△ Acceptance Rate"
+        />
+      </div>
+    </div>
+  </div>
+</div>

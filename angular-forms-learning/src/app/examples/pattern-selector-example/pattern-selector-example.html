@@ -11,100 +11,13 @@
     <!-- 各パターンを行ごとに表示 -->
     @for (pattern of patterns; track $index) {
       <div class="pattern-row">
-        <!-- パターンカード -->
-        <div class="pattern-card" [class.selected]="selectedPatternIndex === $index">
-          <div class="pattern-content">
-            <!-- Angular Material ラジオボタン -->
-            <div class="radio-display">
-              <mat-radio-group [(ngModel)]="selectedPatternIndex">
-                <mat-radio-button [value]="$index">
-                  {{ pattern.name }}
-                </mat-radio-button>
-              </mat-radio-group>
-            </div>
-
-            <!-- パラメータグリッド -->
-            <div class="pattern-form" [formGroup]="patternForms[$index]">
-              <div class="parameters-grid">
-                <!-- パラメータ A -->
-                <div class="parameter-control">
-                  <div class="parameter-header">
-                    <h4>× Stop Rate</h4>
-                  </div>
-                  <div class="slider-input-row">
-                    <mat-slider min="0" max="100" step="1" discrete class="slider">
-                      <input
-                        matSliderThumb
-                        [value]="patternForms[$index].get('a')?.value || 0"
-                        (valueChange)="updateValue($index, 'a', $event)"
-                      />
-                    </mat-slider>
-                    <div class="number-input">
-                      <input type="number" formControlName="a" min="0" max="100" />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- パラメータ B -->
-                <div class="parameter-control">
-                  <div class="parameter-header">
-                    <h4>△ Stop Rate</h4>
-                  </div>
-                  <div class="slider-input-row">
-                    <mat-slider min="0" max="100" step="1" discrete class="slider">
-                      <input
-                        matSliderThumb
-                        [value]="patternForms[$index].get('b')?.value || 0"
-                        (valueChange)="updateValue($index, 'b', $event)"
-                      />
-                    </mat-slider>
-                    <div class="number-input">
-                      <input type="number" formControlName="b" min="0" max="100" />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- パラメータ C -->
-                <div class="parameter-control">
-                  <div class="parameter-header">
-                    <h4>× Acceptance Rate</h4>
-                  </div>
-                  <div class="slider-input-row">
-                    <mat-slider min="0" max="100" step="1" discrete class="slider">
-                      <input
-                        matSliderThumb
-                        [value]="patternForms[$index].get('c')?.value || 0"
-                        (valueChange)="updateValue($index, 'c', $event)"
-                      />
-                    </mat-slider>
-                    <div class="number-input">
-                      <input type="number" formControlName="c" min="0" max="100" />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- パラメータ D -->
-                <div class="parameter-control">
-                  <div class="parameter-header">
-                    <h4>△ Acceptance Rate</h4>
-                  </div>
-                  <div class="slider-input-row">
-                    <mat-slider min="0" max="100" step="1" discrete class="slider">
-                      <input
-                        matSliderThumb
-                        [value]="patternForms[$index].get('d')?.value || 0"
-                        (valueChange)="updateValue($index, 'd', $event)"
-                      />
-                    </mat-slider>
-                    <div class="number-input">
-                      <input type="number" formControlName="d" min="0" max="100" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-pattern-card
+          [patternForm]="patternForms[$index]"
+          [patternName]="pattern.name"
+          [patternIndex]="$index"
+          [selectedPatternIndex]="selectedPatternIndex"
+          [onPatternSelect]="onPatternSelect"
+        />
       </div>
     }
   </mat-card-content>

@@ -1,0 +1,66 @@
+// パターンカード（背景付きコンテナ）
+.pattern-card {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: white;
+  transition: border-color 0.3s ease;
+
+  &.selected {
+    border-color: #1976d2;
+    border-width: 2px;
+  }
+}
+
+// パターンコンテンツ（ラジオボタン + パラメータを横並び）
+.pattern-content {
+  display: flex;
+  gap: 100px;
+  align-items: flex-start;
+}
+
+// ラジオボタンエリア
+.radio-display {
+  min-width: 120px;
+  align-self: flex-start;
+  margin-top: -12px;
+  margin-left: -12px;
+
+  mat-radio-group {
+    display: block;
+  }
+
+  mat-radio-button {
+    font-weight: 500;
+    font-size: 14px;
+  }
+}
+
+// パラメータフォーム
+.pattern-form {
+  flex: 1;
+}
+
+// パラメータグリッド（A, B, C, D を横並び）
+.parameters-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+// レスポンシブ対応
+@media (max-width: 1200px) {
+  .parameters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pattern-content {
+    flex-direction: column;
+  }
+
+  .parameters-grid {
+    grid-template-columns: 1fr;
+  }
+}
