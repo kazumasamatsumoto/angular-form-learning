@@ -1,0 +1,37 @@
+<mat-radio-group [(ngModle)]="selectedPatternIndex">
+  @for (form of patternForms.controls; track i; let i = $index) {
+    <dib class="af-pattern-now">
+      <div class="af-pattern-card" [class.selected]="selectedPatternIndex === i">
+        <div class="af-pattern-content">
+          <div class="af-radio-display">
+            <mat-radio-button [value]="i">Pattern {{ i + 1 }}</mat-radio-button>
+          </div>
+          <div [formGroup]="form">
+            <div class="af-parameters-grid">
+              <div>
+                <p>
+                  <img
+                    src="'http://localhost:4205/assets/images/alerts-definition/icon-x.svg'"
+                    alt="'X'"
+                    class="af-settings-image-icon"
+                  />
+                  Stop Rate
+                </p>
+                <div class="af-full-custom-slider">
+                  <div class="af-stop-rate-number-input">
+                    <input
+                      type="number"
+                      formControlName="stopRateThresholdWorst"
+                      [class.af-input-error]="form.get('stopRateThresholdWorst')?.invalid"
+                    />
+                  </div>
+                  <span>{{ STOP_RATE_MIN }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dib>
+  }
+</mat-radio-group>
