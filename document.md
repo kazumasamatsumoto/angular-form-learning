@@ -14,12 +14,31 @@
 
 ---
 
-## 方法① Console で fetch を上書きする（最も手軽）
+## 方法① Console で xhook を使って XHR を差し替える（動作確認済み）
 
 ### 概要
 
-ブラウザの Console タブに JavaScript を貼り付けることで、特定URLへのリクエストを横取りして任意のステータスコードを返す。  
-**ページリロードで元に戻るため、気軽に試せる。**
+`xhook` というライブラリをConsoleから読み込み、XHRのリクエストをプロキシ化することで任意のステータスコードを返す。  
+**Angular の HttpClient は内部的に XMLHttpRequest（XHR）を使用しているため、`window.fetch` の上書きでは効かない。xhook はこの問題を解決する。**
+
+### なぜ4つのプロパティを書き換える必要があるのか
+
+Angular の HttpClient はレスポンスを受け取るとき、以下の4つを参照してエラー判定を行う。
+
+| プロパティ     | 役割                                                 |
+| -------------- | ---------------------------------------------------- |
+| `status`       | 数値（500）でエラーの種類を判断する                  |
+| `statusText`   | 文字列（"Internal Server Error"）でログ表示に使う    |
+| `responseText` | 文字列としてのレスポンスボディ（旧API）              |
+| `response`     | パース済みのレスポンスボディ（Angular が実際に読む） |
+
+1つでも元の値のままだとAngularの判定が矛盾するため、**4つ全て書き換える必要がある。**
+
+### なぜ `Object.defineProperty` では動かないのか
+
+XHRの `status` はブラウザが内部的にセットするネイティブプロパティであり、`configurable: false` の状態で存在している。  
+レスポンス受信後にこれを `Object.defineProperty` で上書きしようとすると `TypeError` が発生する。  
+xhook はリクエスト送信**前**にXHR全体をプロキシ化するため、この制約を回避できる。
 
 ### 手順
 
@@ -34,61 +53,96 @@
 1. DevTools 上部のタブ一覧から **「Console」** をクリックする
 2. `>` のプロンプトが表示されていることを確認する
 
-#### STEP 3 - スクリプトを貼り付ける
+#### STEP 3 - 貼り付けを許可する
 
-以下のコードをコピーし、Console のプロンプト部分にそのまま貼り付ける。
+初めてConsoleにコードを貼り付けようとすると、以下の警告が表示される場合がある。
+
+```
+Warning: Don't paste code into the Devtools Console that you don't understand
+or haven't reviewed yourself. This could allow attackers to steal your identity
+or take control of your computer. Please type 'allow pasting' below and press
+Enter to allow pasting.
+```
+
+これはEdgeの**正常なセキュリティ機能**であり、エラーではない。
+
+**対処手順：**
+
+1. Consoleのプロンプトに **キーボードで手入力** で以下を打ち込む（コピペ不可）
+   ```
+   allow pasting
+   ```
+2. `Enter` を押す
+3. `undefined` と表示されれば許可完了
+
+> **なぜこの警告が出るのか：**  
+> 悪意あるサイトが「このコードをConsoleに貼り付けてください」と誘導し、  
+> CookieやTokenを盗むスクリプトを実行させる攻撃（Self-XSS）を防ぐための仕組み。  
+> 手入力させることで「内容を理解した上での意図的な操作」であることを確認している。
+>
+> **有効期間：** DevToolsを開いている間のみ有効。閉じて再度開いた場合は再入力が必要。
+
+#### STEP 4 - xhook を読み込む
+
+以下のコードを貼り付けて `Enter` を押す。
 
 ```javascript
-const originalFetch = window.fetch;
-window.fetch = function (url, options) {
-  if (url.includes("/api/target")) {
+const script = document.createElement("script");
+script.src = "https://unpkg.com/xhook@latest/dist/xhook.min.js";
+document.head.appendChild(script);
+```
+
+> **注意：** xhook はインターネット上のCDNから読み込む。  
+> 社内ネットワーク等で外部アクセスが制限されている場合は方法②（Fiddler）を使うこと。
+
+#### STEP 5 - 数秒待ってから差し替えスクリプトを実行する
+
+xhook の読み込みが完了するまで数秒待ってから、以下を貼り付けて `Enter` を押す。
+
+```javascript
+xhook.after(function (request, response) {
+  if (request.url.includes("/settings/thresholds")) {
     // ← 対象URLの一部に書き換える
-    return Promise.resolve(
-      new Response(JSON.stringify({ message: "forced error" }), {
-        status: 500, // ← 返したいステータスコードに変更する
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
+    response.status = 500; // ← 返したいステータスコード
+    response.statusText = "Internal Server Error";
+    response.text = JSON.stringify({ message: "forced error" });
+    response.data = JSON.stringify({ message: "forced error" });
   }
-  return originalFetch(url, options);
-};
+});
 ```
 
 > **ポイント：**
 >
-> - `url.includes('/api/target')` の `/api/target` 部分を、実際にテストしたいAPIのURLの一部に変更する  
+> - `request.url.includes(...)` の文字列を、テストしたいAPIのURLの一部に変更する  
 >   例：`/api/users`、`/api/orders/detail` など
-> - `status: 500` の数値を変えることで 400、401、403、404、503 なども再現できる
+> - `response.status` の数値を変えることで 400、401、403、404、503 なども再現できる
+> - `response.statusText` はステータスコードに対応する文字列に変える  
+>   例：`400` → `'Bad Request'`、`404` → `'Not Found'`、`503` → `'Service Unavailable'`
 
-#### STEP 4 - スクリプトを実行する
-
-1. コードを貼り付けた後、`Enter` キーを押す
-2. `undefined` と表示されれば正常に実行されている
-
-#### STEP 5 - リクエストを発生させる
+#### STEP 6 - リクエストを発生させる
 
 1. テスト対象のページを操作して、APIリクエストが発生する操作を行う  
    例：ボタンを押す、フォームを送信するなど
 
-#### STEP 6 - Network タブで結果を確認する
+#### STEP 7 - Network タブで結果を確認する
 
 1. DevTools の **「Network」** タブをクリックする
 2. リクエスト一覧の中から対象のAPIリクエストを探す
 3. **Status 列** に `500`（または指定したコード）が表示されていることを確認する
 4. リクエストをクリックすると詳細（レスポンスボディなど）も確認できる
 
-#### STEP 7 - 元に戻す
+#### STEP 8 - 元に戻す
 
-- ページを `F5` でリロードするだけで上書きは解除され、元の動作に戻る
+- ページを `F5` でリロードするだけで xhook ごとリセットされ、元の動作に戻る
 
 ### トラブルシューティング
 
-| 症状                                       | 原因                                                    | 対処                                                      |
-| ------------------------------------------ | ------------------------------------------------------- | --------------------------------------------------------- |
-| スクリプトを貼り付けると赤いエラーが出る   | コードが途中でコピーできていない                        | 再度全体をコピーして貼り付ける                            |
-| Networkタブにリクエストが表示されない      | Network タブを開く前にリクエストが発生した              | Network タブを開いた状態でページ操作をやり直す            |
-| ステータスコードが変わっていない           | `url.includes(...)` の文字列が実際のURLと一致していない | Network タブで実際のURLを確認し、一致する文字列に変更する |
-| `XMLHttpRequest` を使っているAPIに効かない | このスクリプトは `fetch` のみ対応                       | 方法② または 方法③ を使う                                 |
+| 症状                                      | 原因                                                            | 対処                                                      |
+| ----------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------- |
+| STEP 4 でエラーが出る                     | 外部CDNへのアクセスが制限されている                             | 方法②（Fiddler）を使う                                    |
+| `xhook is not defined` というエラーが出る | STEP 4 の読み込みが完了していない                               | さらに数秒待ってから STEP 5 を実行する                    |
+| ステータスコードが変わっていない          | `request.url.includes(...)` の文字列が実際のURLと一致していない | Network タブで実際のURLを確認し、一致する文字列に変更する |
+| Networkタブにリクエストが表示されない     | Network タブを開く前にリクエストが発生した                      | Network タブを開いた状態でページ操作をやり直す            |
 
 ---
 
@@ -289,26 +343,26 @@ Edge DevTools の「Local Overrides」機能を使い、ローカルフォルダ
 
 ## 各方法の比較まとめ
 
-| 項目               | 方法① Console        | 方法② Fiddler | 方法③ Local Overrides |
-| ------------------ | -------------------- | ------------- | --------------------- |
-| 難易度             | ★☆☆                  | ★★☆           | ★★★                   |
-| 準備時間           | 1分                  | 10〜15分      | 5分                   |
-| リロード後も有効   | ❌（リセットされる） | ✅            | ✅                    |
-| XMLHttpRequest対応 | ❌                   | ✅            | ✅                    |
-| 外部ツール不要     | ✅                   | ❌            | ✅                    |
-| ルール保存         | ❌                   | ✅            | ✅                    |
-| 最初の習得として   | ◎                    | ○             | △                     |
+| 項目               | 方法① xhook             | 方法② Fiddler | 方法③ Local Overrides |
+| ------------------ | ----------------------- | ------------- | --------------------- |
+| 難易度             | ★☆☆                     | ★★☆           | ★★★                   |
+| 準備時間           | 2分                     | 10〜15分      | 5分                   |
+| リロード後も有効   | ❌（リセットされる）    | ✅            | ✅                    |
+| XMLHttpRequest対応 | ✅                      | ✅            | ✅                    |
+| 外部ツール不要     | ✅（CDNアクセスが必要） | ❌            | ✅                    |
+| ルール保存         | ❌                      | ✅            | ✅                    |
+| 動作確認済み       | ✅                      | ✅            | △                     |
 
 ---
 
 ## 推奨学習順序
 
 ```
-① Console で fetch 上書き
-  └ 仕組みを理解する（JavaScriptで何をしているか体感できる）
+① xhook で XHR をプロキシ化（動作確認済み）
+  └ 最も手軽に試せる。仕組みも理解できる
       ↓
 ② Fiddler AutoResponder
-  └ ツールの力を借りて安定した再現ができるようにする
+  └ 外部CDNが使えない環境や繰り返しのテストに
       ↓
 ③ Local Overrides
   └ 外部ツール不要でDevToolsだけで完結する応用技として習得
